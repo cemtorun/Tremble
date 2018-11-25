@@ -12,4 +12,8 @@ export class DataPopulationService {
   getFrequencyData() : Observable<any> {
   	return this.http.get("https://brian1999lin.lib.id/hackwestern5@dev/");
   }
+
+  getResultData() : Observable<any> {
+  	return this.http.get("https://brian1999lin.lib.id/hackwestern5@dev/result/");
+  }
 }

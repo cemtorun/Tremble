@@ -18,6 +18,9 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
 import { TestPageComponent } from './test-page/test-page.component';
 import { DataPopulationService } from './services/data-population.service';
+import {MatDialogModule} from "@angular/material";
+import { ResultsPopupComponent } from './test-page/results-popup/results-popup.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -29,7 +32,9 @@ import { DataPopulationService } from './services/data-population.service';
       dataEncapsulation: false,
       delay: 300,
       passThruUnknownUrl: true
-    })
+    }),
+    MatDialogModule,
+    BrowserAnimationsModule
   ],
   declarations: [
     AppComponent,
@@ -40,8 +45,10 @@ import { DataPopulationService } from './services/data-population.service';
     ToolbarComponent,
     LoginScreenComponent,
     TestPageComponent,
+    ResultsPopupComponent,
   ],
   providers: [PatientService, DataPopulationService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [ResultsPopupComponent]
 })
 export class AppModule { }

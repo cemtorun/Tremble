@@ -1,0 +1,18 @@
+<div mat-dialog-content>
+	<div class="row">
+		<div class="col-md-6 report-status-wrapper">
+			<p class="report-status">Here's your performance report!</p>
+		</div>
+		<div class="col-md-6">
+			<p class="report-status"> Average Tremor: {{data['value']}}</p>	
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<canvas id="freqCanvas"></canvas>
+		</div>
+		<div class="col-md-6">
+			<canvas id="progressCanvas"></canvas>
+		</div>
+	</div>
+</div>
