@@ -73,7 +73,6 @@ class SampleListener(Leap.Listener):
 
 
 
-            mariArr['timestamp'].append(frame.timestamp)
             mariArr['x'].append(datapos[0])
             mariArr['y'].append(datapos[1])
             mariArr['z'].append(datapos[2])
