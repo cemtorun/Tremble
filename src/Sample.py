@@ -7,6 +7,7 @@
 ################################################################################
 
 globalArr = []
+mariArr = {'timestamp':[],'posx':[],'posy':[],'posz':[],'pitch':[],'roll':[],'yaw':[]}
 
 
 import requests
@@ -43,6 +44,7 @@ class SampleListener(Leap.Listener):
 
     def on_frame(self, controller):
         global globalArr
+        global mariArr
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
@@ -67,13 +69,23 @@ class SampleListener(Leap.Listener):
             dataPitch = direction.pitch * Leap.RAD_TO_DEG
             dataRoll = normal.roll * Leap.RAD_TO_DEG
             dataYaw = direction.yaw * Leap.RAD_TO_DEG
+            datapos = hand.palm_position
 
 
+
+            mariArr[timestamp].append(frame.timestamp)
+            mariArr['posx'].append(datapos[0])
+            mariArr['posy'].append(datapos[1])
+            mariArr['posz'].append(datapos[2])
+            mariArr['pitch'].append(dataPitch)
+            mariArr['roll'].append(dataRoll)
+            mariArr['yaw'].append(dataYaw)
             url = 'https://brian1999lin.lib.id/hackwestern5@dev/'
-            data = {'timestamp':frame.timestamp,'pitch': dataPitch, 'normal':dataRoll,'yaw':dataYaw}
+            data = {'timestamp':frame.timestamp,'posx':datapos[0],'posy':datapos[1],'posz':datapos[2],'pitch': dataPitch, 'roll':dataRoll,'yaw':dataYaw}
             kek = requests.post(url, json=data)
             print kek
             globalArr.append(data)
+
 
             # Calculate the hand's pitch, roll, and yaw angles
             print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
@@ -172,6 +184,7 @@ class SampleListener(Leap.Listener):
 def main():
 
     global globalArr
+    global mariArr
 
 
 
@@ -197,7 +210,7 @@ def main():
     finally:
         # Remove the sample listener when done
         controller.remove_listener(listener)
-        print globalArr
+        print mariArr
 
 
 
