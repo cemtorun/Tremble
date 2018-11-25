@@ -8,6 +8,7 @@ from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
 # Algorithm & Data libraries
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 class MainListener(Leap.Listener):
 
@@ -224,35 +225,27 @@ def main():
 
         # Create an array of first derivative values
         deriv1 = []
-        for i in range(len(columns)):
-            print(columns[i])
+        for i in xrange(len(columns)):
             deriv1.append(derivative(columns[i], samp_freq))
-        print('First Derivative values:', deriv1)
 
         # Create an array of second derivative values from first derivative values
         deriv2 = []
-        for i in range(len(deriv1)):
+        for i in xrange(len(deriv1)):
             deriv2.append(derivative(deriv1[i], samp_freq))
-        print('Second Derivative values:', deriv2)
 
         # Generate and store the FFT values
         final_fft = []
-        for i in range(len(deriv2)):
-            #print(deriv2[i])
+        for i in xrange(len(deriv2)):
             fft_vals = np.fft.fft(deriv2[i])
-            #print("{0} : {1}".format(i, fft_vals))
             final_fft.append(fft_vals)
 
-        print(final_fft)
-
         # Plot the FFT values from the array
-        import matplotlib.pyplot as plt
         sum = 0
-        for i in range(len(deriv2)):
-            result = fourier(0.06, deriv2[i])
-            print(result[0])
-            sum += result[0]
-        print("Result:",sum/len(deriv2))
+        for i in xrange(len(deriv2)):
+            fourier_freq = fourier(0.06, deriv2[i])
+            sum += fourier_freq[0]
+        # Return result frequency to be analyzed
+        result = sum/len(deriv2)
 
 if __name__ == "__main__":
     main()
