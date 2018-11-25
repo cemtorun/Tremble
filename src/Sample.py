@@ -7,7 +7,7 @@
 ################################################################################
 
 globalArr = []
-mariArr = {'x':[],'y':[],'z':[],'pitch':[],'roll':[],'yaw':[]}
+mariArr = {'timestamp':[],'posx':[],'posy':[],'posz':[],'pitch':[],'roll':[],'yaw':[]}
 
 
 import requests
@@ -73,14 +73,16 @@ class SampleListener(Leap.Listener):
 
 
 
-            mariArr['x'].append(datapos[0])
-            mariArr['y'].append(datapos[1])
-            mariArr['z'].append(datapos[2])
+            mariArr[timestamp].append(frame.timestamp)
+            mariArr['posx'].append(datapos[0])
+            mariArr['posy'].append(datapos[1])
+            mariArr['posz'].append(datapos[2])
             mariArr['pitch'].append(dataPitch)
             mariArr['roll'].append(dataRoll)
             mariArr['yaw'].append(dataYaw)
             url = 'https://brian1999lin.lib.id/hackwestern5@dev/'
-            data = {'timestamp':frame.timestamp,'posx':datapos[0],'posy':datapos[1],'posz':datapos[2],'pitch': dataPitch, 'roll':dataRoll,'yaw':dataYaw}
+            frequency = (frame.timestamp + datapos[0] + datapos[2] + dataPitch + dataRoll + dataYaw)/6
+            data = {'timestamp':frame.timestamp,'frequency':frequency}
             kek = requests.post(url, json=data)
             print kek
             globalArr.append(data)
