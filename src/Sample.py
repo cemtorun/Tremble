@@ -79,10 +79,12 @@ class SampleListener(Leap.Listener):
             mariArr['pitch'].append(dataPitch)
             mariArr['roll'].append(dataRoll)
             mariArr['yaw'].append(dataYaw)
-            url = 'https://brian1999lin.lib.id/hackwestern5@dev/'
-            frequency = (frame.timestamp + datapos[0] + datapos[2] + dataPitch + dataRoll + dataYaw)/6
-            data = {'timestamp':frame.timestamp,'frequency':frequency}
-            kek = requests.post(url, json=data)
+            url = 'https://utils.lib.id/kv/set/'
+            headers = {'Authorization': 'Bearer FsMmgV7ypwVF4_sNHnoTD8C-E0CHmQ5_ZOG0k0VRxGeDS8_Kq8zJgdwA25rvIMjp'}
+            frequency = (datapos[1] + datapos[0] + datapos[2] + dataPitch + dataRoll + dataYaw)/6
+            # data = {'timestamp':frame.timestamp,'frequency':frequency}
+            data = {'key': 'data', 'value': {'timestamp': frame.timestamp, 'frequency': frequency}}
+            kek = requests.post(url, json=data, headers=headers)
             print kek
             globalArr.append(data)
 
