@@ -5,7 +5,7 @@
 # https://developer.leapmotion.com/sdk_agreement, or another agreement         #
 # between Leap Motion and you, your company or other organization.             #
 ################################################################################
-
+#xd
 globalArr = []
 mariArr = {'posx':[],'posy':[],'posz':[],'pitch':[],'roll':[],'yaw':[]}
 
