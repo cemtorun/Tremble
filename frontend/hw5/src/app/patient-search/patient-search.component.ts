@@ -7,21 +7,21 @@ import {
   distinctUntilChanged,
   switchMap
 } from 'rxjs/operators';
-import { Hero } from './hero';
-import { HeroSearchService } from './hero-search.service';
+import { Patient } from '../shared/patient';
+import { PatientSearchService } from '../services/patient-search.service';
 
 @Component({
-  selector: 'my-hero-search',
-  templateUrl: './hero-search.component.html',
-  styleUrls: ['./hero-search.component.css'],
-  providers: [HeroSearchService]
+  selector: 'app-patient-search',
+  templateUrl: './patient-search.component.html',
+  styleUrls: ['./patient-search.component.css'],
+  providers: [PatientSearchService]
 })
-export class HeroSearchComponent implements OnInit {
-  heroes: Observable<Hero[]>;
+export class PatientSearchComponent implements OnInit {
+  patients: Observable<Patient[]>;
   private searchTerms = new Subject<string>();
 
   constructor(
-    private heroSearchService: HeroSearchService,
+    private patientSearchService: PatientSearchService,
     private router: Router
   ) {}
 
@@ -31,27 +31,27 @@ export class HeroSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.heroes = this.searchTerms.pipe(
+    this.patients = this.searchTerms.pipe(
       debounceTime(300), // wait for 300ms pause in events
       distinctUntilChanged(), // ignore if next search term is same as previous
       switchMap(
         term =>
           term // switch to new observable each time
             ? // return the http search observable
-              this.heroSearchService.search(term)
-            : // or the observable of empty heroes if no search term
-              of<Hero[]>([])
+              this.patientSearchService.search(term)
+            : // or the observable of empty patients if no search term
+              of<Patient[]>([])
       ),
       catchError(error => {
         // TODO: real error handling
         console.log(`Error in component ... ${error}`);
-        return of<Hero[]>([]);
+        return of<Patient[]>([]);
       })
     );
   }
 
-  gotoDetail(hero: Hero): void {
-    const link = ['/detail', hero.id];
+  gotoDetail(patient: Patient): void {
+    const link = ['/detail', patient.id];
     this.router.navigate(link);
   }
 }

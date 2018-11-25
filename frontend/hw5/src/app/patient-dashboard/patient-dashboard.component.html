@@ -1,0 +1,9 @@
+<h3>Top Patients</h3>
+<div class="grid grid-pad">
+  <div *ngFor="let patient of patients" (click)="gotoDetail(patient)" class="col-1-4">
+    <div class="module patient">
+      <h4>{{patient.name}}</h4>
+    </div>
+  </div>
+</div>
+<app-patient-search></app-patient-search>

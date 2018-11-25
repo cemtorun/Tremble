@@ -1,0 +1,44 @@
+<h2>My Patients</h2>
+
+<ul class="patients">
+  <li *ngFor="let patient of patients" (click)="onSelect(patient)" [class.selected]="patient === selectedPatient">
+    <span class="patient-element">
+      <span class="badge">{{patient.id}}</span> {{patient.name}}
+    </span>
+    <button class="delete-button" (click)="deletePatient(patient, $event)">Delete</button>
+  </li>
+</ul>
+
+<div class="error" *ngIf="error">{{error}}</div>
+<button (click)="addPatient()">Add New Patient</button>
+<div *ngIf="addingPatient">
+  <app-patient-detail (close)="close($event)"></app-patient-detail>
+</div>
+
+<div *ngIf="selectedPatient">
+  <h2>
+    {{selectedPatient.name | uppercase}} is my patient
+  </h2>
+  <button (click)="gotoDetail()">View Details</button>
+</div>
+
+<div>
+  <style>
+    .hidden { visibility: hidden}
+  </style>
+  <h4>ngFor Features</h4>
+  <button (click)="showNgFor=!showNgFor">{{showNgFor ? 'Hide' : 'Show'}} ngFor Features</button>
+  <table [class.hidden]="!showNgFor">
+    <tbody>
+      <tr *ngFor="let patient of patients; let ix = index; let c = count; let e = even; let o = odd; let f = first; let l = last">
+        <td>{{patient.name}}</td>
+        <td>{{ix}}</td>
+        <td>{{c}}</td>
+        <td>{{e}}</td>
+        <td>{{o}}</td>
+        <td>{{f}}</td>
+        <td>{{l}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

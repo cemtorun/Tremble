@@ -3,61 +3,61 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError as observableThrowError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { Hero } from './hero';
+import { Patient } from '../shared/patient';
 
 @Injectable()
-export class HeroService {
-  private heroesUrl = 'app/heroes'; // URL to web api
+export class PatientService {
+  private patientsUrl = 'app/patients'; // URL to web api
 
   constructor(private http: HttpClient) {}
 
-  getHeroes() {
+  getPatients() {
     return this.http
-      .get<Hero[]>(this.heroesUrl)
+      .get<Patient[]>(this.patientsUrl)
       .pipe(map(data => data), catchError(this.handleError));
   }
 
-  getHero(id: number): Observable<Hero> {
-    return this.getHeroes().pipe(
-      map(heroes => heroes.find(hero => hero.id === id))
+  getPatient(id: number): Observable<Patient> {
+    return this.getPatients().pipe(
+      map(patients => patients.find(patient => patient.id === id))
     );
   }
 
-  save(hero: Hero) {
-    if (hero.id) {
-      return this.put(hero);
+  save(patient: Patient) {
+    if (patient.id) {
+      return this.put(patient);
     }
-    return this.post(hero);
+    return this.post(patient);
   }
 
-  delete(hero: Hero) {
+  delete(patient: Patient) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${this.heroesUrl}/${hero.id}`;
+    const url = `${this.patientsUrl}/${patient.id}`;
 
-    return this.http.delete<Hero>(url).pipe(catchError(this.handleError));
+    return this.http.delete<Patient>(url).pipe(catchError(this.handleError));
   }
 
-  // Add new Hero
-  private post(hero: Hero) {
+  // Add new Patient
+  private post(patient: Patient) {
     const headers = new Headers({
       'Content-Type': 'application/json'
     });
 
     return this.http
-      .post<Hero>(this.heroesUrl, hero)
+      .post<Patient>(this.patientsUrl, patient)
       .pipe(catchError(this.handleError));
   }
 
-  // Update existing Hero
-  private put(hero: Hero) {
+  // Update existing Patient
+  private put(patient: Patient) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    const url = `${this.heroesUrl}/${hero.id}`;
+    const url = `${this.patientsUrl}/${patient.id}`;
 
-    return this.http.put<Hero>(url, hero).pipe(catchError(this.handleError));
+    return this.http.put<Patient>(url, patient).pipe(catchError(this.handleError));
   }
 
   private handleError(res: HttpErrorResponse | any) {

@@ -9,12 +9,13 @@ import { InMemoryDataService } from './in-memory-data.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { HeroService } from './hero.service';
-import { DashboardComponent } from './dashboard.component';
-import { HeroesComponent } from './heroes.component';
-import { HeroDetailComponent } from './hero-detail.component';
-import { HeroSearchComponent } from './hero-search.component';
+import { PatientService } from './services/patient.service';
+import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
+import { PatientsComponent } from './patients/patients.component';
+import { PatientDetailComponent } from './patient-detail/patient-detail.component';
+import { PatientSearchComponent } from './patient-search/patient-search.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import { LoginScreenComponent } from './login-screen/login-screen.component';
 
 @NgModule({
   imports: [
@@ -30,13 +31,14 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
   ],
   declarations: [
     AppComponent,
-    DashboardComponent,
-    HeroSearchComponent,
-    HeroesComponent,
-    HeroDetailComponent,
+    PatientDashboardComponent,
+    PatientSearchComponent,
+    PatientsComponent,
+    PatientDetailComponent,
     ToolbarComponent,
+    LoginScreenComponent,
   ],
-  providers: [HeroService],
+  providers: [PatientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
