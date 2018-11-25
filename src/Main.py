@@ -1,13 +1,15 @@
-#xd
+# Arrays storing hand data
 globalArr = []
 mariArr = {'x':[],'y':[],'z':[],'pitch':[],'roll':[],'yaw':[]}
-
+# Leap Motion libraries
 import requests
-
 import Leap, sys, thread, time
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
+# Algorithm & Data libraries
+import pandas as pd
+import numpy as np
 
-class SampleListener(Leap.Listener):
+class MainListener(Leap.Listener):
 
     def on_init(self, controller):
         print "Initialized"
@@ -161,6 +163,24 @@ class SampleListener(Leap.Listener):
         if state == Leap.Gesture.STATE_INVALID:
             return "STATE_INVALID"
 
+    # Calculates the derivative of each value x at index i+1 and x at index i
+    # col: an array of column values from 'x', 'y', 'z', 'pitch', 'roll', 'yaw'
+    def derivative(self, col, samp_freq):
+        arr = []
+        for i in range(len(col)-1):
+            arr.append((col[i+1] - col[i])/samp_freq)
+        return arr
+
+    def fourier(self, timestep, data):
+        N = len(data)//2
+        freq = np.fft.fftfreq(len(data), d=timestep)[:N]
+        fft = np.fft.fft(data)[:N]
+        amp = np.abs(fft)/N
+        order = np.argsort(amp)[::-1]
+        return freq[order]
+
+
+
 def main():
 
     global globalArr
@@ -185,6 +205,54 @@ def main():
         # Remove the sample listener when done
         controller.remove_listener(listener)
         print mariArr
+
+        # Create dataframe
+        df = pd.DataFrame(mariArr)
+
+        # Number of frames
+        n = len(df)
+        # 10 sec fixed time intervals
+        time = 10
+
+        # Calculate the sample frequency of the data
+        samp_freq = n/time
+        # Store all the column value
+        columns = []
+
+        for key, value in df.items():
+            columns.append(list(value))
+
+        # Create an array of first derivative values
+        deriv1 = []
+        for i in range(len(columns)):
+            print(columns[i])
+            deriv1.append(derivative(columns[i], samp_freq))
+        print('First Derivative values:', deriv1)
+
+        # Create an array of second derivative values from first derivative values
+        deriv2 = []
+        for i in range(len(deriv1)):
+            deriv2.append(derivative(deriv1[i], samp_freq))
+        print('Second Derivative values:', deriv2)
+
+        # Generate and store the FFT values
+        final_fft = []
+        for i in range(len(deriv2)):
+            #print(deriv2[i])
+            fft_vals = np.fft.fft(deriv2[i])
+            #print("{0} : {1}".format(i, fft_vals))
+            final_fft.append(fft_vals)
+
+        print(final_fft)
+
+        # Plot the FFT values from the array
+        import matplotlib.pyplot as plt
+        sum = 0
+        for i in range(len(deriv2)):
+            result = fourier(0.06, deriv2[i])
+            print(result[0])
+            sum += result[0]
+        print("Result:",sum/len(deriv2))
 
 if __name__ == "__main__":
     main()
