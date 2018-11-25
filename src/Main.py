@@ -10,6 +10,22 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Calculates the derivative of each value x at index i+1 and x at index i
+# col: an array of column values from 'x', 'y', 'z', 'pitch', 'roll', 'yaw'
+def derivative(col, samp_freq):
+    arr = []
+    for i in range(len(col)-1):
+        arr.append((col[i+1] - col[i])/samp_freq)
+    return arr
+
+def fourier(timestep, data):
+    N = len(data)//2
+    freq = np.fft.fftfreq(len(data), d=timestep)[:N]
+    fft = np.fft.fft(data)[:N]
+    amp = np.abs(fft)/N
+    order = np.argsort(amp)[::-1]
+    return freq[order]
+
 class MainListener(Leap.Listener):
 
     def on_init(self, controller):
@@ -70,6 +86,7 @@ class MainListener(Leap.Listener):
             data = {'key': 'data', 'value': {'timestamp': frame.timestamp, 'frequency': frequency}}
             kek = requests.post(url, json=data, headers=headers)
             print kek
+            print "IMPORTANT NUMBER: %f" %(frequency)
             globalArr.append(data)
 
             # Calculate the hand's pitch, roll, and yaw angles
@@ -78,78 +95,8 @@ class MainListener(Leap.Listener):
                 normal.roll * Leap.RAD_TO_DEG,
                 direction.yaw * Leap.RAD_TO_DEG)
 
-            # Get arm bone
-            arm = hand.arm
-            print "  Arm direction: %s, wrist position: %s, elbow position: %s" % (
-                arm.direction,
-                arm.wrist_position,
-                arm.elbow_position)
 
-            # Get fingers
-            for finger in hand.fingers:
 
-                print "    %s finger, id: %d, length: %fmm, width: %fmm" % (
-                    self.finger_names[finger.type],
-                    finger.id,
-                    finger.length,
-                    finger.width)
-
-                # Get bones
-                for b in range(0, 4):
-                    bone = finger.bone(b)
-                    print "      Bone: %s, start: %s, end: %s, direction: %s" % (
-                        self.bone_names[bone.type],
-                        bone.prev_joint,
-                        bone.next_joint,
-                        bone.direction)
-
-        # Get tools
-        for tool in frame.tools:
-
-            print "  Tool id: %d, position: %s, direction: %s" % (
-                tool.id, tool.tip_position, tool.direction)
-
-        # Get gestures
-        for gesture in frame.gestures():
-            if gesture.type == Leap.Gesture.TYPE_CIRCLE:
-                circle = CircleGesture(gesture)
-
-                # Determine clock direction using the angle between the pointable and the circle normal
-                if circle.pointable.direction.angle_to(circle.normal) <= Leap.PI/2:
-                    clockwiseness = "clockwise"
-                else:
-                    clockwiseness = "counterclockwise"
-
-                # Calculate the angle swept since the last frame
-                swept_angle = 0
-                if circle.state != Leap.Gesture.STATE_START:
-                    previous_update = CircleGesture(controller.frame(1).gesture(circle.id))
-                    swept_angle =  (circle.progress - previous_update.progress) * 2 * Leap.PI
-
-                print "  Circle id: %d, %s, progress: %f, radius: %f, angle: %f degrees, %s" % (
-                        gesture.id, self.state_names[gesture.state],
-                        circle.progress, circle.radius, swept_angle * Leap.RAD_TO_DEG, clockwiseness)
-
-            if gesture.type == Leap.Gesture.TYPE_SWIPE:
-                swipe = SwipeGesture(gesture)
-                print "  Swipe id: %d, state: %s, position: %s, direction: %s, speed: %f" % (
-                        gesture.id, self.state_names[gesture.state],
-                        swipe.position, swipe.direction, swipe.speed)
-
-            if gesture.type == Leap.Gesture.TYPE_KEY_TAP:
-                keytap = KeyTapGesture(gesture)
-                print "  Key Tap id: %d, %s, position: %s, direction: %s" % (
-                        gesture.id, self.state_names[gesture.state],
-                        keytap.position, keytap.direction )
-
-            if gesture.type == Leap.Gesture.TYPE_SCREEN_TAP:
-                screentap = ScreenTapGesture(gesture)
-                print "  Screen Tap id: %d, %s, position: %s, direction: %s" % (
-                        gesture.id, self.state_names[gesture.state],
-                        screentap.position, screentap.direction )
-
-        if not (frame.hands.is_empty and frame.gestures().is_empty):
-            print ""
 
     def state_string(self, state):
         if state == Leap.Gesture.STATE_START:
@@ -164,21 +111,6 @@ class MainListener(Leap.Listener):
         if state == Leap.Gesture.STATE_INVALID:
             return "STATE_INVALID"
 
-    # Calculates the derivative of each value x at index i+1 and x at index i
-    # col: an array of column values from 'x', 'y', 'z', 'pitch', 'roll', 'yaw'
-    def derivative(self, col, samp_freq):
-        arr = []
-        for i in range(len(col)-1):
-            arr.append((col[i+1] - col[i])/samp_freq)
-        return arr
-
-    def fourier(self, timestep, data):
-        N = len(data)//2
-        freq = np.fft.fftfreq(len(data), d=timestep)[:N]
-        fft = np.fft.fft(data)[:N]
-        amp = np.abs(fft)/N
-        order = np.argsort(amp)[::-1]
-        return freq[order]
 
 
 
@@ -188,7 +120,7 @@ def main():
     global mariArr
 
     # Create a sample listener and controller
-    listener = SampleListener()
+    listener = MainListener()
     controller = Leap.Controller()
 
     # Have the sample listener receive events from the controller
@@ -242,10 +174,16 @@ def main():
         # Plot the FFT values from the array
         sum = 0
         for i in xrange(len(deriv2)):
-            fourier_freq = fourier(0.06, deriv2[i])
+            fourier_freq = fourier(0.09, deriv2[i])
             sum += fourier_freq[0]
         # Return result frequency to be analyzed
+
         result = sum/len(deriv2)
+        url = 'https://utils.lib.id/kv/set/'
+        headers = {'Authorization': 'Bearer FsMmgV7ypwVF4_sNHnoTD8C-E0CHmQ5_ZOG0k0VRxGeDS8_Kq8zJgdwA25rvIMjp'}
+        data = {'key': 'data2', 'value': {'result': result}}
+        kek = requests.post(url, json=data, headers=headers)
+        print result
 
 if __name__ == "__main__":
     main()
