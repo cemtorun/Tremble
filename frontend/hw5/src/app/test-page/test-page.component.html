@@ -1,0 +1,9 @@
+<div class="graph-wrapper" [hidden]="!loaded">
+	<div class="buttons">
+		<button type="button" class="btn btn-primary" (click)="startTimer()">Start</button>
+		<button type="button" class="btn btn-warning" (click)="pauseTimer()">Pause</button>
+	</div>
+	<div>
+		<canvas id="canvas"></canvas>
+	</div>
+</div>

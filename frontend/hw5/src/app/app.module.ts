@@ -16,6 +16,8 @@ import { PatientDetailComponent } from './patient-detail/patient-detail.componen
 import { PatientSearchComponent } from './patient-search/patient-search.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { LoginScreenComponent } from './login-screen/login-screen.component';
+import { TestPageComponent } from './test-page/test-page.component';
+import { DataPopulationService } from './services/data-population.service';
 
 @NgModule({
   imports: [
@@ -37,8 +39,9 @@ import { LoginScreenComponent } from './login-screen/login-screen.component';
     PatientDetailComponent,
     ToolbarComponent,
     LoginScreenComponent,
+    TestPageComponent,
   ],
-  providers: [PatientService],
+  providers: [PatientService, DataPopulationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
