@@ -7,7 +7,7 @@
 ################################################################################
 
 globalArr = []
-mariArr = {'timestamp':[],'posx':[],'posy':[],'posz':[],'pitch':[],'roll':[],'yaw':[]}
+mariArr = {'posx':[],'posy':[],'posz':[],'pitch':[],'roll':[],'yaw':[]}
 
 
 import requests
@@ -73,7 +73,6 @@ class SampleListener(Leap.Listener):
 
 
 
-            mariArr[timestamp].append(frame.timestamp)
             mariArr['posx'].append(datapos[0])
             mariArr['posy'].append(datapos[1])
             mariArr['posz'].append(datapos[2])
