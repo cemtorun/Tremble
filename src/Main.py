@@ -1,21 +1,11 @@
-################################################################################
-# Copyright (C) 2012-2013 Leap Motion, Inc. All rights reserved.               #
-# Leap Motion proprietary and confidential. Not for distribution.              #
-# Use subject to the terms of the Leap Motion SDK Agreement available at       #
-# https://developer.leapmotion.com/sdk_agreement, or another agreement         #
-# between Leap Motion and you, your company or other organization.             #
-################################################################################
 #xd
 globalArr = []
 mariArr = {'x':[],'y':[],'z':[],'pitch':[],'roll':[],'yaw':[]}
 
-
 import requests
-
 
 import Leap, sys, thread, time
 from Leap import CircleGesture, KeyTapGesture, ScreenTapGesture, SwipeGesture
-
 
 class SampleListener(Leap.Listener):
 
@@ -44,8 +34,6 @@ class SampleListener(Leap.Listener):
         # Get the most recent frame and report some basic information
         frame = controller.frame()
 
-
-
         print "Frame id: %d, timestamp: %d, hands: %d, fingers: %d, tools: %d, gestures: %d" % (
               frame.id, frame.timestamp, len(frame.hands), len(frame.fingers), len(frame.tools), len(frame.gestures()))
 
@@ -61,13 +49,10 @@ class SampleListener(Leap.Listener):
             normal = hand.palm_normal
             direction = hand.direction
 
-
             dataPitch = direction.pitch * Leap.RAD_TO_DEG
             dataRoll = normal.roll * Leap.RAD_TO_DEG
             dataYaw = direction.yaw * Leap.RAD_TO_DEG
             datapos = hand.palm_position
-
-
 
             mariArr['x'].append(datapos[0])
             mariArr['y'].append(datapos[1])
@@ -84,13 +69,11 @@ class SampleListener(Leap.Listener):
             print kek
             globalArr.append(data)
 
-
             # Calculate the hand's pitch, roll, and yaw angles
             print "  pitch: %f degrees, roll: %f degrees, yaw: %f degrees" % (
                 direction.pitch * Leap.RAD_TO_DEG,
                 normal.roll * Leap.RAD_TO_DEG,
                 direction.yaw * Leap.RAD_TO_DEG)
-
 
             # Get arm bone
             arm = hand.arm
@@ -178,13 +161,10 @@ class SampleListener(Leap.Listener):
         if state == Leap.Gesture.STATE_INVALID:
             return "STATE_INVALID"
 
-
 def main():
 
     global globalArr
     global mariArr
-
-
 
     # Create a sample listener and controller
     listener = SampleListener()
@@ -193,15 +173,11 @@ def main():
     # Have the sample listener receive events from the controller
     controller.add_listener(listener)
 
-
-
-
     # Keep this process running until Enter is pressed
     print "Press Enter to quit..."
     try:
 
         sys.stdin.readline()
-
 
     except KeyboardInterrupt:
         pass
@@ -209,8 +185,6 @@ def main():
         # Remove the sample listener when done
         controller.remove_listener(listener)
         print mariArr
-
-
 
 if __name__ == "__main__":
     main()
