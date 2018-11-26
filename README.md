@@ -4,6 +4,6 @@ The inspiration came from the recent development of therapeutic supports for phy
 
 Tremble is a diagnostic tool for physicians that allow them to more accurately detect the presence of tremors in their patients in real time providing extremely accurate data about their patients.
 
-We built Tremble using mainly Python utilizing elements of the Leap Motion library. Additionally we used Python to develop the FFT algorithm we implemented. From there, we use Javascript and the AngularJS framework to develop the front-end interface that the physicians will interact with.
+We built Tremble using mainly Python utilizing elements of the Leap Motion library. Additionally we used Python to develop the FFT algorithm we implemented. From there, we use Javascript and the Angular 7 framework to develop the front-end interface that the physicians will interact with.
 
 We see great opportunity in the future development of Tremble. As of now what is a very untouched industry, as there is more data we want to be able build a machine learning model to be able to train a model to recognize different types of hand tremors and associate them with different types of tremor associated diseases along with being able to detect the severity of these diseases.
