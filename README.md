@@ -1,6 +1,6 @@
 # Detecting Tremors Using Leap Motion
 
-## Won best use of Data Visualization at HackWestern
+### Won best use of Data Visualization at HackWestern
 
 The inspiration came from the recent development of therapeutic supports for physicians. One key example that come to the teams mind the need for development in being able to accurately diagnose degenerative disorders. From that, given some past knowledge two of the most major types of tumours are essential tremor (ET) and the tremor of Parkinson’s disease (PD). _ A tremor is defined as an involuntary, rhythmic, and roughly sinusoidal movement of one or more body parts._ After being able to see some of the hardware available, we realized that we could use the Leap Motion - a Human-Machine-Interface that provides a method of position tracking with extremely precise accuracy, and high throughput rate of up to 300 samples per second. From that our idea was born - Tremble.
 
